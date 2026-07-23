@@ -1,6 +1,6 @@
 {
-  "name": "나의 하루 정리표 :) — Daily Dial",
-  "short_name": "나의 하루 정리표",
+  "name": "My Daily-Dial 🜸 — Daily Dial",
+  "short_name": "My Daily-Dial",
   "description": "원형 하루 계획표. 드래그로 색칠하고, 저장하고, 보관함에서 관리하세요.",
   "start_url": "./",
   "scope": "./",
