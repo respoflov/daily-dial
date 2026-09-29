@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>랜딩 미리보기 · 환영 스플래시</title>
+<style>
+  :root{ --bg:#FAFAF8; --ink:#33322F; --soft:#6E6C66; --line:#DDDBD4; }
+  @media (prefers-color-scheme: dark){ :root{ --bg:#1C1B19; --ink:#EDEBE4; --soft:#9C9A91; --line:#3A3835; } }
+  *{box-sizing:border-box;}
+  body{margin:0; min-height:100vh; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+  .splash{position:fixed; inset:0; background:var(--bg); z-index:10; display:flex;
+    align-items:center; justify-content:center; transition:opacity .6s ease;}
+  .splash.hide{opacity:0; pointer-events:none;}
+  .splash-title{font-size:1.6rem; font-weight:700; text-align:center;}
+  .splash-tag{font-size:.88rem; color:var(--soft); text-align:center; margin-top:10px;}
+  .replay{position:fixed; top:16px; right:16px; font-size:.72rem; color:var(--soft);
+    border:1px solid var(--line); border-radius:8px; padding:6px 10px; background:none; cursor:pointer;}
+  .after{max-width:420px; margin:0 auto; padding:90px 24px; text-align:center;}
+  .after p{color:var(--soft); font-size:.85rem; line-height:1.7;}
+  .after a{display:inline-block; margin-top:18px; padding:11px 20px; border:1px solid var(--ink);
+    border-radius:8px; color:var(--ink); text-decoration:none; font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<button class="replay" id="replay">▶ 다시 재생</button>
+
+<div class="splash" id="splash">
+  <div>
+    <div class="splash-title">My Daily-Dial 🜸</div>
+    <div class="splash-tag">하루를, 한 바퀴로.</div>
+  </div>
+</div>
+
+<div class="after">
+  <p>1.5~2초 뒤 스플래시가 서서히 사라지고, 이 자리에 실제로는 오늘의 원판 화면(메인 앱)이 나타납니다.<br><br>
+  이 파일은 랜딩 연출 타이밍/느낌만 비교하기 위한 미리보기라 원판은 생략했습니다.</p>
+  <a href="./draft-full.html">→ 실제 시안(draft-full.html)에서 이어보기</a>
+</div>
+
+<script>
+function playSplash(){
+  const s=document.getElementById('splash');
+  s.classList.remove('hide');
+  void s.offsetWidth; /* reflow to restart transition */
+  setTimeout(()=>s.classList.add('hide'), 1800);
+}
+document.getElementById('replay').onclick=playSplash;
+playSplash();
+</script>
+</body>
+</html>

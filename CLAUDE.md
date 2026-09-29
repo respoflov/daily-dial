@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - [index.html](index.html) — the entire app (styles, markup, and logic in one file). This is where almost all work happens.
 - [sw.js](sw.js) — offline cache service worker. Bump `CACHE` (`daily-dial-v1`) whenever cached asset contents change, or returning users will keep the stale version.
 - [manifest.json](manifest.json) — PWA install metadata.
-- [README.txt](README.txt) — Korean end-user documentation (features, usage, deployment). Update this when user-facing behavior changes.
+- [README.md](README.md) — Korean end-user documentation (features, usage, deployment). Update this when user-facing behavior changes.
 
 ## Running / testing
 

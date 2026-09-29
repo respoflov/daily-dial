@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>랜딩 미리보기 · 오늘 요약 대시보드</title>
+<style>
+  :root{ --bg:#FAFAF8; --ink:#33322F; --soft:#6E6C66; --line:#DDDBD4; --card:#FFFFFF; --routine:#B99A3E; }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#1C1B19; --ink:#EDEBE4; --soft:#9C9A91; --line:#3A3835; --card:#252420; }
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; min-height:100vh; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+    display:flex; align-items:center; justify-content:center; padding:24px;}
+  .card{max-width:360px; width:100%; text-align:center;}
+  .hello{font-size:1.05rem; font-weight:700;}
+  .date{font-size:.78rem; color:var(--soft); margin-top:4px; font-variant-numeric:tabular-nums;}
+  .mini{width:150px; height:150px; margin:22px auto;}
+  .stats{display:flex; justify-content:center; gap:28px; margin-top:6px;}
+  .stats div{display:flex; flex-direction:column; align-items:center;}
+  .stats strong{font-size:1.3rem;}
+  .stats span{font-size:.68rem; color:var(--soft); margin-top:2px;}
+  .affirm{margin-top:20px; font-size:.84rem; color:var(--ink); border-top:1px solid var(--line);
+    padding-top:14px;}
+  .enter{display:inline-block; margin-top:22px; padding:12px 22px; background:var(--ink); color:var(--bg);
+    border-radius:10px; text-decoration:none; font-size:.86rem; font-weight:600;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hello">오늘도 좋은 하루 되세요 🜸</div>
+  <div class="date" id="date"></div>
+  <div class="mini" id="mini"></div>
+  <div class="stats">
+    <div><strong id="streak">-</strong><span>연속 작성일</span></div>
+    <div><strong id="taskCount">-</strong><span>오늘 일정 수</span></div>
+  </div>
+  <div class="affirm" id="affirm"></div>
+  <a class="enter" href="./draft-full.html">오늘 계획표 열기 →</a>
+</div>
+
+<script>
+function dateKey(d){ d=d||new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function getPlans(){ try{ return JSON.parse(localStorage.getItem("dd:plans")||"[]"); }catch(e){ return []; } }
+
+let cur=null;
+try{ cur=JSON.parse(localStorage.getItem("dd:current")||"null"); }catch(e){}
+const today=dateKey();
+const DOW=["일","월","화","수","목","금","토"];
+const now=new Date();
+document.getElementById('date').textContent = `${today} (${DOW[now.getDay()]})`;
+
+const arr=getPlans();
+const todayPlan = (cur && cur.date===today) ? cur : arr.find(p=>p.date===today);
+const tasks = (todayPlan && todayPlan.tasks) ? todayPlan.tasks : [];
+document.getElementById('taskCount').textContent = tasks.length;
+document.getElementById('affirm').textContent = (todayPlan && todayPlan.affirmation) ? todayPlan.affirmation : "오늘의 말이 아직 없어요.";
+
+let streak=0, d=new Date();
+while(true){
+  const k=dateKey(d);
+  const p = (k===today) ? todayPlan : arr.find(x=>x.date===k);
+  if(!p || !p.tasks || !p.tasks.length) break;
+  streak++; d.setDate(d.getDate()-1);
+}
+document.getElementById('streak').textContent = streak+"일";
+
+let svg = `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="34" fill="var(--card)" stroke="var(--line)"/>`;
+tasks.forEach(t=>{
+  const a0=t.s/24*360, a1=t.e/24*360;
+  const P=(r,a)=>{ const A=(a-90)*Math.PI/180; return (40+r*Math.cos(A)).toFixed(1)+","+(40+r*Math.sin(A)).toFixed(1); };
+  const lg=(a1-a0)>180?1:0;
+  svg+=`<path d="M40,40 L${P(34,a0)} A34,34 0 ${lg} 1 ${P(34,a1)} Z" fill="${t.color}" stroke="#fff" stroke-width=".6"/>`;
+});
+svg+=`<circle cx="40" cy="40" r="1.6" fill="currentColor"/></svg>`;
+document.getElementById('mini').innerHTML=svg;
+</script>
+</body>
+</html>
